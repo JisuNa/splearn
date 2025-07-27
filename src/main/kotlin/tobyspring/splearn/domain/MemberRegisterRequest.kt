@@ -1,6 +1,6 @@
 package tobyspring.splearn.domain
 
-data class MemberCreateRequest(
+data class MemberRegisterRequest(
     val name: String,
     val email: String,
     val password: String

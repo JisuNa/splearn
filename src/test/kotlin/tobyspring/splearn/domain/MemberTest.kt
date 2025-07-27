@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
+import tobyspring.splearn.domain.MemberFixture.Companion.passwordEncoder
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -14,13 +15,9 @@ class MemberTest {
 
     @BeforeEach
     fun setUp() {
-        this.passwordEncoder = object : PasswordEncoder {
-            override fun encode(password: String): String = password.uppercase()
-            override fun matches(password: String, passwordHash: String): Boolean =
-                password.uppercase() == passwordHash
-        }
+        this.passwordEncoder = passwordEncoder()
 
-        member = Member.create(
+        member = Member.register(
             email = Email("toby@splearn.com"),
             nickname = "Toby",
             password = "secret",
@@ -106,12 +103,12 @@ class MemberTest {
     @Test
     fun invalidEmail() {
         assertThatThrownBy {
-            Member.create(
+            Member.register(
                 email = Email("invalid email"),
                 nickname = "Toby",
                 password = "secret",
                 passwordEncoder = passwordEncoder
             )
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        }.isInstanceOf(IllegalStateException::class.java)
     }
 }

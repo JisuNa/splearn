@@ -1,12 +1,25 @@
 package tobyspring.splearn.domain
 
-class Member private constructor(
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+
+@Entity
+class Member(
     val email: Email,
     var nickname: String,
     private var passwordHash: String,
 ) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0
+
+    @Enumerated(EnumType.STRING)
     var status: MemberStatus = MemberStatus.PENDING
-        private set
+        protected set
 
     fun activate() {
         check(status == MemberStatus.PENDING) { "PENDING 상태가 아닙니다." }
@@ -35,7 +48,7 @@ class Member private constructor(
     fun isActive(): Boolean = status.isActive()
 
     companion object {
-        fun create(email: Email, nickname: String, password: String, passwordEncoder: PasswordEncoder): Member {
+        fun register(email: Email, nickname: String, password: String, passwordEncoder: PasswordEncoder): Member {
             return Member(email, nickname, passwordEncoder.encode(password))
         }
     }
