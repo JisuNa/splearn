@@ -6,9 +6,11 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import org.hibernate.annotations.NaturalId
 
 @Entity
 class Member(
+    @NaturalId
     val email: Email,
     var nickname: String,
     private var passwordHash: String,
