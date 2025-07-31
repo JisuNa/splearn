@@ -49,9 +49,14 @@ class Member(
 
     fun isActive(): Boolean = status.isActive()
 
-    companion object {
-        fun register(email: Email, nickname: String, password: String, passwordEncoder: PasswordEncoder): Member {
-            return Member(email, nickname, passwordEncoder.encode(password))
-        }
+    companion object Factory {
+        fun register(email: Email, nickname: String, password: String, passwordEncoder: PasswordEncoder) =
+            Member(email, nickname, passwordEncoder.encode(password))
+
+        fun register(req: MemberRegisterRequest, passwordEncoder: PasswordEncoder) = Member(
+            email = req.email,
+            nickname = req.name,
+            passwordHash = passwordEncoder.encode(req.password)
+        )
     }
 }
