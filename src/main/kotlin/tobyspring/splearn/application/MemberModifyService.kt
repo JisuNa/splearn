@@ -12,7 +12,8 @@ import tobyspring.splearn.domain.MemberRegisterRequest
 import tobyspring.splearn.domain.PasswordEncoder
 
 @Service
-class MemberService(
+class MemberModifyService(
+    private val memberQueryService: MemberQueryService,
     private val memberRepository: MemberRepository,
     private val emailSender: EmailSender,
     private val passwordEncoder: PasswordEncoder
@@ -23,7 +24,7 @@ class MemberService(
         checkDuplicateEmail(req.email)
 
         return memberRepository.save(Member.register(req = req, passwordEncoder = passwordEncoder))
-            .also { sendWelcomeEmail(it.email)}
+            .also { sendWelcomeEmail(it.email) }
     }
 
     private fun checkDuplicateEmail(email: Email) {
@@ -38,5 +39,11 @@ class MemberService(
             subject = "등록을 완료해주세요.",
             body = "아래 링크를 클릭해서 등록을 완료해주세요"
         )
+    }
+
+    @Transactional
+    override fun activate(memberId: Long) {
+        memberQueryService.find(memberId)
+            .apply { activate() }
     }
 }

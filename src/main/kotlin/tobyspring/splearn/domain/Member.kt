@@ -55,7 +55,7 @@ class Member(
 
         fun register(req: MemberRegisterRequest, passwordEncoder: PasswordEncoder) = Member(
             email = req.email,
-            nickname = req.name,
+            nickname = req.nickname,
             passwordHash = passwordEncoder.encode(req.password)
         )
     }

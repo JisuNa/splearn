@@ -8,4 +8,5 @@ import tobyspring.splearn.domain.MemberRegisterRequest
  */
 interface MemberRegister {
     fun register(req: MemberRegisterRequest): Member
+    fun activate(memberId: Long)
 }
