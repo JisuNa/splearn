@@ -18,6 +18,7 @@ class MemberModifyService(
     private val emailSender: EmailSender,
     private val passwordEncoder: PasswordEncoder
 ) : MemberRegister {
+
     @Transactional
     override fun register(req: MemberRegisterRequest): Member {
 

@@ -15,22 +15,22 @@ import tobyspring.splearn.domain.Member
 import tobyspring.splearn.domain.MemberRegisterRequest
 import tobyspring.splearn.domain.PasswordEncoder
 
-class MemberServiceTest : FunSpec({
+class MemberRegisterTest : FunSpec({
 
+    val memberQueryService = mockk<MemberQueryService>()
     val memberRepository = mockk<MemberRepository>()
     val emailSender = mockk<EmailSender>(relaxed = true)
     val passwordEncoder = mockk<PasswordEncoder>()
-    val memberModifyService = MemberModifyService(memberRepository, emailSender, passwordEncoder)
+    val memberModifyService = MemberModifyService(memberQueryService, memberRepository, emailSender, passwordEncoder)
 
-    val invalidEmail = Email("invalidEmail")
     val validEmail = Email("test@example.com")
-    val mockPassword = "mockPassword"
-    val mockNickname = "mockNickname"
+    val mockPassword = "password123"
+    val mockNickname = "nickname"
 
     val memberRequest = MemberRegisterRequest(
+        nickname = mockNickname,
         email = validEmail,
-        password = mockPassword,
-        nickname = mockNickname
+        password = mockPassword
     )
 
     beforeTest {
