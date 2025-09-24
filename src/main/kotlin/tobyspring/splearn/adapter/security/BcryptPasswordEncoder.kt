@@ -1,7 +1,8 @@
-package tobyspring.splearn.domain
+package tobyspring.splearn.adapter.security
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
+import tobyspring.splearn.domain.PasswordEncoder
 
 @Component
 class BcryptPasswordEncoder: PasswordEncoder {

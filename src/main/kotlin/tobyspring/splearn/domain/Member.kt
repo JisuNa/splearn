@@ -1,25 +1,18 @@
 package tobyspring.splearn.domain
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import org.hibernate.annotations.NaturalId
 
 @Entity
 class Member(
-    @NaturalId
     val email: Email,
     var nickname: String,
     private var passwordHash: String,
-) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0
-
+): AbstractEntity() {
     @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
     var status: MemberStatus = MemberStatus.PENDING
         protected set
 
