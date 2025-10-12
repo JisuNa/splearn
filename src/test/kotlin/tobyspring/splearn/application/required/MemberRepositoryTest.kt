@@ -1,4 +1,4 @@
-package tobyspring.splearn.domain
+package tobyspring.splearn.application.required
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.dao.DataIntegrityViolationException
-import tobyspring.splearn.application.required.MemberRepository
-import tobyspring.splearn.domain.MemberFixture.Companion.passwordEncoder
+import tobyspring.splearn.application.member.required.MemberRepository
+import tobyspring.splearn.domain.member.Member
+import tobyspring.splearn.domain.member.MemberFixture.Companion.passwordEncoder
+import tobyspring.splearn.domain.member.MemberStatus
+import tobyspring.splearn.domain.shared.Email
 
 @DataJpaTest
 class MemberRepositoryTest(
@@ -31,6 +34,12 @@ class MemberRepositoryTest(
         assertThat(member.id).isNotNull()
 
         entityManager.flush()
+        entityManager.clear()
+
+        val savedMember = memberRepository.findById(member.id)!!
+
+        assertThat(savedMember.status).isEqualTo(MemberStatus.PENDING)
+        assertThat(savedMember.detail!!.activatedAt).isNotNull
     }
 
     @Test

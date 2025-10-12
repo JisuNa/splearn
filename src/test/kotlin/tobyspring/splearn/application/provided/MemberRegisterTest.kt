@@ -1,4 +1,4 @@
-package tobyspring.splearn.application
+package tobyspring.splearn.application.provided
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
@@ -7,13 +7,15 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import tobyspring.splearn.application.required.EmailSender
-import tobyspring.splearn.application.required.MemberRepository
-import tobyspring.splearn.domain.DuplicateEmailException
-import tobyspring.splearn.domain.Email
-import tobyspring.splearn.domain.Member
-import tobyspring.splearn.domain.MemberRegisterRequest
+import tobyspring.splearn.application.member.MemberModifyService
+import tobyspring.splearn.application.member.MemberQueryService
+import tobyspring.splearn.application.member.required.EmailSender
+import tobyspring.splearn.application.member.required.MemberRepository
 import tobyspring.splearn.domain.PasswordEncoder
+import tobyspring.splearn.domain.member.DuplicateEmailException
+import tobyspring.splearn.domain.member.Member
+import tobyspring.splearn.domain.member.MemberRegisterRequest
+import tobyspring.splearn.domain.shared.Email
 
 class MemberRegisterTest : FunSpec({
 
@@ -43,7 +45,7 @@ class MemberRegisterTest : FunSpec({
         // given
         every { memberRepository.findByEmail(memberRequest.email) } returns null
         every { passwordEncoder.encode(memberRequest.password) } returns encodedPassword
-        val member = Member.register(memberRequest, passwordEncoder)
+        val member = Member.Factory.register(memberRequest, passwordEncoder)
         every { memberRepository.save(any()) } returns member
 
         // when

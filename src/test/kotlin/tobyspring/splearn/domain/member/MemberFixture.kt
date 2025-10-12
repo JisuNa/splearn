@@ -1,4 +1,6 @@
-package tobyspring.splearn.domain
+package tobyspring.splearn.domain.member
+
+import tobyspring.splearn.domain.PasswordEncoder
 
 class MemberFixture {
     companion object {

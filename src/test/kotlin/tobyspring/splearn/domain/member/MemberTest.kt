@@ -1,11 +1,11 @@
-package tobyspring.splearn.domain
+package tobyspring.splearn.domain.member
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
-import tobyspring.splearn.domain.MemberFixture.Companion.passwordEncoder
+import tobyspring.splearn.domain.PasswordEncoder
+import tobyspring.splearn.domain.shared.Email
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -15,19 +15,21 @@ class MemberTest {
 
     @BeforeEach
     fun setUp() {
-        this.passwordEncoder = passwordEncoder()
+        this.passwordEncoder = MemberFixture.Companion.passwordEncoder()
 
-        member = Member.register(
+        val req = MemberRegisterRequest(
             email = Email("toby@splearn.com"),
             nickname = "Toby",
             password = "secret",
-            passwordEncoder = passwordEncoder
         )
+
+        member = Member.register(req = req, passwordEncoder = passwordEncoder)
     }
 
     @Test
-    fun createMember() {
-        Assertions.assertThat(member.status.equals(MemberStatus.PENDING))
+    fun registerMember() {
+        assertThat(member.status.equals(MemberStatus.PENDING))
+        assertThat(member.detail!!.registeredAt).isNotNull
     }
 
     @Test
@@ -35,6 +37,7 @@ class MemberTest {
         member.activate();
 
         assertThat(member.status.equals(MemberStatus.ACTIVE))
+        assertThat(member.detail!!.activatedAt).isNotNull
     }
 
     @Test
@@ -51,6 +54,7 @@ class MemberTest {
         member.deactivate()
 
         assertThat(member.status == MemberStatus.DEACTIVATED)
+        assertThat(member.detail!!.deactivatedAt).isNotNull
     }
 
     @Test

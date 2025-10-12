@@ -1,6 +1,7 @@
-package tobyspring.splearn.domain
+package tobyspring.splearn.domain.member
 
 import jakarta.validation.constraints.Size
+import tobyspring.splearn.domain.shared.Email
 
 data class MemberRegisterRequest(
     @Size(min = 5, max = 20)
